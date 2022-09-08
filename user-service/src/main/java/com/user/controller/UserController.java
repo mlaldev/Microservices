@@ -3,10 +3,7 @@ package com.user.controller;
 import com.user.entity.User;
 import com.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -26,14 +23,28 @@ public class UserController {
     public User getUser(@PathVariable("userId") Long userId) {
 
         User user = this.userService.getUser(userId);
-        //http://localhost:9002/contact/user/1311
-
-        List contacts = this.restTemplate.getForObject("http://contact-service/contact/user/" + user.getUserId(), List.class);
-
-
+        String url = "http://contact-service/contact/user/";
+        List contacts = this.restTemplate.getForObject(url + user.getUserId(), List.class);
         user.setContacts(contacts);
         return user;
 
+    }
+
+    @GetMapping("/allusers")
+    public List getAllUser() {
+        List<User> userList = userService.getAllUser();
+        String url = "http://contact-service/contact/user/";
+        for(User user : userList) {
+            List contacts = this.restTemplate.getForObject(url + user.getUserId(), List.class);
+            user.setContacts(contacts);
+        }
+        return userList;
+    }
+
+    @PostMapping("/saveUser")
+    public boolean saveUser(@RequestBody User user) {
+        boolean status = userService.saveUser(user);
+        return status;
     }
 
 }

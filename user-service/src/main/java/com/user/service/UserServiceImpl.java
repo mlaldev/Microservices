@@ -20,4 +20,14 @@ public class UserServiceImpl implements UserService {
     public User getUser(Long id) {
         return list.stream().filter(user -> user.getUserId().equals(id)).findAny().orElse(null);
     }
+
+    @Override
+    public List getAllUser() {
+        return list;
+    }
+
+    @Override
+    public boolean saveUser(User user) {
+        return list.add(user);
+    }
 }
