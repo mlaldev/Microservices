@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface ContactService {
 
-    public List<Contact> getContactsOfUser(Long userId);
+    List<Contact> getContactsOfUser(Long userId);
 
+    boolean saveContact(Contact contact);
 }

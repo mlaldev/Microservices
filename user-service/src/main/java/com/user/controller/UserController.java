@@ -41,9 +41,12 @@ public class UserController {
         return userList;
     }
 
-    @PostMapping("/saveUser")
+    @PostMapping(value = "/saveUser", consumes = "application/json", produces = "application/json")
     public boolean saveUser(@RequestBody User user) {
-        boolean status = userService.saveUser(user);
+        User user1 = new User(user.getUserId(),user.getName(), user.getPhone());
+        boolean status = userService.saveUser(user1);
+        String url = "http://contact-service/contact/user/savecontact";
+        this.restTemplate.put(url,user.getContacts());
         return status;
     }
 
